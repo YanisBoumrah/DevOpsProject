@@ -15,8 +15,8 @@ pipeline {
           env.DOCKER_IMAGE_NAME = 'DevOps'
           env.DOCKER_IMAGE_TAG = "latest"
 
-          // Construire l'image Docker à partir du Dockerfile et l'étiqueter avec le numéro de
-          sh "docker build -t yanisboumrah/${env.DOCKER_IMAGE_NAME}:${env.DOCKER_IMAGE_TAG} ."
+          // Construire l'image Docker à partir du Dockerfile et l'étiqueter avec le numéro de version de build
+          sh "docker build -t ${env.DOCKER_REGISTRY}/${env.DOCKER_IMAGE_NAME}:${env.DOCKER_IMAGE_TAG} ."
 
           // Connecter Docker au registre DockerHub
           sh "docker login ${env.DOCKER_REGISTRY} -u ${dockerHubUsername} -p ${dockerHubPassword}"
