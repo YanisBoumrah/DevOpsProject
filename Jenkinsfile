@@ -1,8 +1,8 @@
 pipeline {
-  agent any
+    agent any
 
-  stages {
-    stage('Build and Push Docker Image') {
+    stages {
+        stage('Build and Push Docker Image') {
       steps {
         script {
           // Récupérer les informations d'authentification DockerHub à partir de Jenkins Credentials
@@ -26,5 +26,18 @@ pipeline {
         }
       }
     }
-  }
+        stage('Deploy to Kubernetes') {
+            steps {
+                script {
+                    // Charger le fichier de déploiement
+                    def deploymentContent = readFile 'deployment.yaml'
+
+                    withCredentials([file(credentialsId: 'kubeconfig', variable: 'kubeconfigFile')]) {
+                        // Appliquer le fichier de déploiement au cluster Kubernetes
+                        sh "KUBECONFIG=${kubeconfigFile} kubectl apply -f - <<< '${deploymentContent}'"
+                    }
+                }
+            }
+        }
+    }
 }
