@@ -12,7 +12,7 @@ pipeline {
 
           // Définir les variables d'environnement pour Docker
           env.DOCKER_REGISTRY = 'docker.io'
-          env.DOCKER_IMAGE_NAME = 'DevOps'
+          env.DOCKER_IMAGE_NAME = 'devops'
           env.DOCKER_IMAGE_TAG = "latest"
 
           // Construire l'image Docker à partir du Dockerfile et l'étiqueter avec le numéro de version de build
