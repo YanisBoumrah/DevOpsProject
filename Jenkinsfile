@@ -22,7 +22,7 @@ pipeline {
           sh "docker login -u ${dockerHubUsername} -p ${dockerHubPassword}"
 
           // Pousser l'image Docker construite sur DockerHub
-          sh "docker push ${env.DOCKER_REGISTRY}/${env.DOCKER_IMAGE_NAME}:${env.DOCKER_IMAGE_TAG}"
+          sh "docker push yanisboumrah/${env.DOCKER_IMAGE_NAME}:${env.DOCKER_IMAGE_TAG}"
         }
       }
     }
