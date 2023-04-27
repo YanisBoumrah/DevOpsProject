@@ -30,7 +30,7 @@ pipeline {
             steps {
                 script {
                     // Charger le fichier de déploiement
-                    def deploymentContent = readFile 'deployment.yaml'
+                    def deploymentContent = readFile './deployment.yaml'
 
                     withCredentials([file(credentialsId: 'kubeconfig', variable: 'kubeconfigFile')]) {
                         // Appliquer le fichier de déploiement au cluster Kubernetes
