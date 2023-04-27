@@ -32,7 +32,7 @@ pipeline {
                     // Charger le fichier de déploiement
                     def deploymentContent = readFile 'deployment.yaml'
 
-                    withCredentials([file(credentialsId: 'kubeconfig', variable: 'kubeconfigFile')]) {
+                    withCredentials([file(credentialsId: 'kubeconfig', variable: 'config')]) {
                         // Appliquer le fichier de déploiement au cluster Kubernetes
                         sh "KUBECONFIG=${kubeconfigFile} kubectl apply -f - <<< '${deploymentContent}'"
                     }
