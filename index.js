@@ -1,17 +1,62 @@
-const express = require("express");
-const app = express();
+const {getSgbd} = require("./utils.js");
 
-// Route pour l'URL localhost:8000/
-app.get("/", (req, res) => {
-  res.send("Bonjour");
-});
+const {startCycle,
+       loadData,
+    } = require('./savingSystem.js');
 
-// Route pour l'URL localhost:8000/bonjour
-app.get("/bonjour", (req, res) => {
-  res.send("Ça va ?");
-});
+const {
+        GetMethod,
+        PostMethod,
+        PutMethod,
+        DeleteMethod,
+        OptionMethod
+} = require('./methods.js');
 
-// Démarrage du serveur
-app.listen(8000, () => {
-  console.log("Serveur démarré sur le port 8000");
-});
+const chemin = "./maintenence/"
+const http = require('http');
+
+const port = 8000;
+const host = '127.0.0.1';
+
+const handleServer = (req, res) =>{
+    try{
+        if(req.method == 'GET'){
+
+           GetMethod(req, res);
+
+        }else if(req.method == 'POST'){
+
+           PostMethod(req, res);
+
+        }else if (req.method == 'PUT'){
+
+            PutMethod(req, res);
+
+        }else if(req.method == 'DELETE'){
+
+            DeleteMethod(req, res);
+
+        }else if(req.method == 'OPTIONS'){
+            
+            OptionMethod(req, res);
+        }
+
+    } catch(e){
+        console.log(e.toString());
+        res.statusCode = 404;
+        res.end(`{messsage: "${e.toString()}"}`);
+    }
+}
+
+//Chargement des données en mémpoire
+var sgbd = getSgbd();
+loadData(chemin,sgbd);
+
+
+const server = http.createServer(handleServer);
+server.listen(port, host, () =>{
+    console.log(`Server is running at http://${host}:${port}/`)
+})
+
+//
+startCycle();
