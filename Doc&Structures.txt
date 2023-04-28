@@ -1,4 +1,4 @@
-//Structure de la base de donnée
+//Structure de la base de données
 SGBD = {
 	database1:{
 		collection1:{
