@@ -1,7 +1,7 @@
 const express = require("express");
 const app = express();
 
-// Route pour l'URL localhost:8000/
+// Route pour l'URL localhost:8000
 app.get("/", (req, res) => {
   res.send("Bonjour");
 });
