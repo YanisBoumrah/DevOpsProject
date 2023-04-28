@@ -29,21 +29,25 @@ pipeline {
             steps {
                 script {
                     // Charger le fichier de déploiement
-                    def deploymentContent = readFile('./deployment.yaml')
+                    def deploymentContent = readFile('deployment.yaml')
 
                     withCredentials([file(credentialsId: 'kubeconfig', variable: 'kubeconfigFile')]) {
                         // Créer un fichier temporaire pour stocker le kubeconfig
                         def kubeconfigTempFile = sh(script: 'mktemp', returnStdout: true).trim()
+                        // Créer un fichier temporaire pour stocker le contenu du déploiement
+                        def deploymentTempFile = sh(script: 'mktemp', returnStdout: true).trim()
 
                         // Copier le kubeconfig dans le fichier temporaire
                         sh "cp ${kubeconfigFile} ${kubeconfigTempFile}"
+                        // Écrire le contenu du déploiement dans le fichier temporaire
+                        writeFile(file: deploymentTempFile, text: deploymentContent)
 
                         try {
                             // Appliquer le fichier de déploiement au cluster Kubernetes
-                            sh(script: "KUBECONFIG=${kubeconfigTempFile} kubectl apply -f - <<< '${deploymentContent}'", shell: '/bin/bash')
-                    } finally {
-                            // Supprimer le fichier temporaire
-                            sh "rm -f ${kubeconfigTempFile}"
+                            sh "KUBECONFIG=${kubeconfigTempFile} kubectl apply -f ${deploymentTempFile}"
+                        } finally {
+                            // Supprimer les fichiers temporaires
+                            sh "rm -f ${kubeconfigTempFile} ${deploymentTempFile}"
                         }
                     }
                 }
